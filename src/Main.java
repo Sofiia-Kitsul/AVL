@@ -4,9 +4,8 @@ public class Main {
        AVLTree avlTree = new AVLTree();
 
        avlTree.insert(10);
-        System.out.println();
         avlTree.insert(5);
-        System.out.println();
+
         avlTree.insert(1);
 
         System.out.println("asdf");

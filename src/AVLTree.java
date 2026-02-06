@@ -115,85 +115,71 @@ public class AVLTree {
         return n;
     }
 
-//    public void insertHelper(Node n, int value) {
-//        System.out.println("I'm adding");
-//        if(n != null) {
-//            if ((n.getData() == value) && (n.getRight() == null) && (n.getLeft() == null)) {
-//                //update height,
-//                n.setHeight(updateHeight(n));
-//                //balance
-//                int balance = balanceHelper(n);
-//                //find rotation case and do rotation if needed;
-//                rotating(balance, n);
-//            }
-//            else if(n.getData() == value){
-//                return;
-//            }
-//            else if (n.getData() > value) {
-//                System.out.println("I'm gonna go left");
-//                if(n.getLeft() == null){
-//                    Node newN = new Node(value);
-//                    n.setLeft(newN);
-//                }
-//                n = n.getLeft();
-//            }
-//            else if (n.getData() < value) {
-//                System.out.println("I'm gonna go right");
-//                if(n.getRight() == null){
-//                    Node newN = new Node(value);
-//                    n.setRight(newN);
-//                }
-//                n = n.getRight();
-//            }
-//            insertHelper(n, value);
-//        }
-//    }
+
     public Node rotating(int balance, Node n){
+        //keep working on these!!!!!!!!!!!!!!!!!!!
         if((balance > 1) || (balance < -1)){
             if (balance > 1){
-                if(balanceHelper(n.getLeft()) < -1){ // redo here
+                if(balanceHelper(n.getLeft()) < 0){
+                    // redo here
                     //left right
-                    //part 1
-                    // Node
-                    //part 1
-//                    Node newRoot= n.right;
-//                    n.setRight(null);
-//                    newRoot.right = n;
-//                    //part 2
-//                    n;   //question
-//                    Node newR= n.left;
-//                    n.setLeft(null);
-//                    newR.right = n;
-//
-//                }
-//                else{
+                    // part 1
+                    Node helper = n.getLeft();
+                    Node newRoot = helper.right;
+                    helper.setRight(null);
+                    n.setLeft(newRoot);
+                    n.getLeft().setLeft(helper);
+                    helper.setRight(null);
+                    helper.left = newRoot;
+
+                    //part 2
+                    Node crootSaver = n;
+                    n = helper;
+                    helper.setRight(crootSaver);
+                    updateHeight(n);
+                    return n;
+                }
+                else{
                     //single right
                     System.out.println("I am here at single right case the node is: " + n.getData());
-                    Node newRoot= n.left;
-                    n.setLeft(null);
-                    newRoot.right = n;
-                    return newRoot;
+                    Node helper = n;
+                    n = n.getLeft();
+                    helper.setLeft(n.getRight());
+                    n.setRight(helper);
+                    helper.setHeight(updateHeight(helper));
+                    n.setHeight(updateHeight(n));
+                    return n;
                 }
             }
             else {
-                if(balanceHelper(n.getRight()) > 1){ //redo here
-//                    //right left
-//                    //part 1
-//                    Node helperNodeLeft = new Node(n.getLeft().getData());
-//                    Node rotating = new Node(n.getData());
-//                    n = helperNodeLeft;
-//                    n.setRight(rotating);
-//                    //part 2 // sam as else?
-//                    Node helperNode = new Node(n.getData());
-//                    n = n.getRight();
-//                    n.setLeft(helperNode);
-//                }
-//                else{
+                if(balanceHelper(n.getRight()) > 0){
+                    //redo here
+                    //right left
+                    // part 1
+                    Node helper = n.getRight();
+                    Node newRoot = helper.left;
+                    helper.setLeft(null);
+                    n.setRight(newRoot);
+                    n.getRight().setRight(helper);
+                    helper.setLeft(null);
+                    helper.right = newRoot;
+
+                    //part 2
+                    Node crootSaver = n;
+                    n = helper;
+                    helper.setLeft(crootSaver);
+                    updateHeight(n);
+                    return n;
+                }
+                else{
                     //single left
-                    Node newRoot= n.right;
-                    n.setRight(null);
-                    newRoot.right = n;
-                    return newRoot;
+                    Node helper = n;
+                    n = n.getRight();
+                    helper.setRight(n.getLeft());
+                    n.setLeft(helper);
+                    helper.setHeight(updateHeight(helper));
+                    n.setHeight(updateHeight(n));
+                    return n;
                 }
             }
         }
@@ -246,17 +232,23 @@ public class AVLTree {
 
         //edge cases here
 
+        //update height
+        n.setHeight(updateHeight(n));
+        //balance
+        int balance = balanceHelper(n);
+        //find rotation case and do rotation if needed;
+        n = rotating(balance, n);
+
         return n;
+
     }
     public Node findMinDeleteHelper(Node n) {
         while (n.getLeft() != null) {
             n = n.getLeft();
         }
         return n;
+
     }
-
-
-
 
     public boolean search(int data) {
         // TODO: Call the recursive helper method (or implement iteratively)
