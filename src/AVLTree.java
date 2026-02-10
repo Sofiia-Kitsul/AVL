@@ -124,20 +124,21 @@ public class AVLTree {
                     // redo here
                     //left right
                     // part 1
-                    Node helper = n.getLeft();
-                    Node newRoot = helper.right;
-                    helper.setRight(null);
-                    n.setLeft(newRoot);
-                    n.getLeft().setLeft(helper);
-                    helper.setRight(null);
-                    helper.left = newRoot;
+                    Node leftChild = n.getLeft();
+                    Node middle = leftChild.getRight();
+                    leftChild.setRight(middle.getLeft());
+                    middle.setLeft(leftChild);
+                    n.setLeft(middle);
+                    leftChild.setHeight(updateHeight(leftChild));
 
                     //part 2
-                    Node crootSaver = n;
-                    n = helper;
-                    helper.setRight(crootSaver);
-                    updateHeight(n);
-                    return n;
+                    Node newRoot = n.getLeft();
+                    n.setLeft(newRoot.getRight());
+                    newRoot.setRight(n);
+                    n.setHeight(updateHeight(n));
+                    newRoot.setHeight(updateHeight(newRoot));
+                    System.out.println("pt2");
+                    return newRoot;
                 }
                 else{
                     //single right
@@ -156,20 +157,20 @@ public class AVLTree {
                     //redo here
                     //right left
                     // part 1
-                    Node helper = n.getRight();
-                    Node newRoot = helper.left;
-                    helper.setLeft(null);
-                    n.setRight(newRoot);
-                    n.getRight().setRight(helper);
-                    helper.setLeft(null);
-                    helper.right = newRoot;
+                    Node rightChild = n.getRight();
+                    Node middle = rightChild.getLeft();
+                    rightChild.setLeft(middle.getRight());
+                    middle.setRight(rightChild);
+                    n.setRight(middle);
+                    rightChild.setHeight(updateHeight(rightChild));
 
                     //part 2
-                    Node crootSaver = n;
-                    n = helper;
-                    helper.setLeft(crootSaver);
-                    updateHeight(n);
-                    return n;
+                    Node newRoot = n.getRight();
+                    n.setRight(newRoot.getLeft());
+                    newRoot.setLeft(n);
+                    n.setHeight(updateHeight(n));
+                    newRoot.setHeight(updateHeight(newRoot));
+                    return newRoot;
                 }
                 else{
                     //single left
