@@ -100,10 +100,14 @@ public class AVLTree {
             return helper;
         }
         if(value < n.data) {
-           n.setLeft(insertHelperV2(n.left,value));
+            n.setLeft(insertHelperV2(n.left, value));
+        }
+        else if(value > n.data) {
+            n.setRight(insertHelperV2(n.right, value));
         }
         else {
-            n.setRight(insertHelperV2(n.right,value));
+            // Duplicate value — reject it, return the node unchanged
+            return n;
         }
         //update height,
         n.setHeight(updateHeight(n));
